@@ -179,11 +179,9 @@ function sendToS3(options, directory, target, callback) {
 
   callback = callback || function() { };
 
-  s3client = knox.createClient({
-    key: options.key,
-    secret: options.secret,
-    bucket: options.bucket
-  });
+  // Deleting destination because it's not an explicitly named knox option
+  delete options.destination;
+  s3client = knox.createClient(options);
 
   log('Attemping to upload ' + target + ' to the ' + options.bucket + ' s3 bucket');
   s3client.putFile(sourceFile, path.join(destination, target),  function(err, res){
